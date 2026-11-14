@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An interactive student guide to NASA space equipment left on the Moon and Mars.">
+<title>Beyond Earth | NASA Space Equipment</title>
+<style>
+:root {
+    --bg: #061329;
+    --panel: #0c1e3b;
+    --panel2: #12294a;
+    --purple: #91aaff;
+    --cyan: #80d8ff;
+    --text: #f4f7ff;
+    --muted: #c1cde0;
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: #061329;
+    background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(#80d8ff 1px, transparent 1px);
+    background-size: 90px 90px, 140px 140px;
+    background-position: 0 0, 45px 55px;
+    color: var(--text);
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    line-height: 1.65;
+}
+
+header {
+    position: relative;
+}
+
+.banner {
+    width: 100%;
+    display: block;
+    max-height: 390px;
+    object-fit: cover;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 13px;
+    background: rgba(6, 19, 41, 0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #31517c;
+}
+
+nav a {
+    color: var(--text);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: .95rem;
+}
+
+nav a:hover {
+    background: #234875;
+    color: white;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 28px 20px 70px;
+}
+
+section {
+    padding: 42px 0;
+    scroll-margin-top: 75px;
+}
+
+.eyebrow {
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: .76rem;
+    font-weight: bold;
+}
+
+h1, h2, h3 {
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 8px 0 14px;
+}
+
+p {
+    color: var(--muted);
+}
+
+.intro {
+    max-width: 760px;
+    font-size: 1.08rem;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.card {
+    background: linear-gradient(145deg, #12294a, #0c1e3b);
+    border: 1px solid #31517c;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 12px 35px #0005;
+    transition: transform .3s, box-shadow .3s;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 30px #80d8ff25;
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.symbol {
+    height: 130px;
+    border-radius: 12px;
+    margin: -4px -4px 18px;
+    display: grid;
+    place-items: center;
+    font-size: 3.7rem;
+    background: radial-gradient(circle, #28558a, #102442 70%);
+}
+
+.tag {
+    display: inline-block;
+    color: var(--cyan);
+    font-size: .78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.btn {
+    display: inline-block;
+    border: 0;
+    border-radius: 24px;
+    background: linear-gradient(90deg, #326bb5, #579bd1);
+    color: white;
+    padding: 11px 18px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.btn:hover {
+    filter: brightness(1.2);
+    transform: scale(1.04);
+}
+
+.fact {
+    display: none;
+    background: #102c48;
+    border-left: 3px solid var(--cyan);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-top: 12px;
+    color: #e6f7ff;
+}
+
+.fact.show {
+    display: block;
+}
+
+.timeline {
+    border-left: 2px solid #579bd1;
+    margin: 24px 0 0 8px;
+    padding-left: 22px;
+}
+
+.event {
+    position: relative;
+    margin: 0 0 22px;
+}
+
+.event:before {
+    content: "";
+    position: absolute;
+    left: -29px;
+    top: 7px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+}
+
+.quizbox {
+    background: linear-gradient(145deg, #12294a, #0c1e3b);
+    border: 1px solid #31517c;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 18px;
+}
+
+.answers {
+    display: grid;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.answers button {
+    background: #19385d;
+    color: white;
+    border: 1px solid #456b96;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.answers button:hover {
+    background: #28558a;
+}
+
+#feedback {
+    font-weight: bold;
+    min-height: 28px;
+    color: var(--cyan);
+}
+
+footer {
+    text-align: center;
+    padding: 28px 18px;
+    border-top: 1px solid #31517c;
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.small {
+    font-size: .88rem;
+}
+
+a {
+    color: #9bdcff;
+}
+
+@media(max-width:600px) {
+    .banner {
+        min-height: 150px;
+        object-fit: cover;
+    }
+
+    nav {
+        gap: 2px;
+    }
+
+    nav a {
+        font-size: .82rem;
+        padding: 7px 9px;
+    }
+
+    h2 {
+        font-size: 1.65rem;
+    }
+}
+
+
+/* SPACE EQUIPMENT MISSION CARDS */
+
+.mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.mission-card {
+    background: #0c1e3b;
+    border: 1px solid #29496f;
+    border-radius: 15px;
+    padding: 22px;
+    transition: 0.3s ease;
+}
+
+.mission-card:hover {
+    transform: translateY(-6px);
+    border-color: #80d8ff;
+    box-shadow: 0 8px 25px #80d8ff20;
+}
+
+.mission-card h3 {
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.mission-card p {
+    color: #c1cde0;
+    font-size: 14px;
+}
+
+.mission-card .date {
+    color: #80d8ff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.mission-card a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #80d8ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.mission-card a:hover {
+    text-decoration: underline;
+}
+
+.mission-group {
+    margin-bottom: 55px;
+}
+
+</style>
+
+
+</head>
+<body>
+<header id="home">
+<img class="banner" src="c:\Users\DELL\Downloads\Welcome to Our Classroom Banner in Navy Fun Space Themed Style.jpg" alt="beyond earth">
+<nav aria-label="Main navigation">
+<a href="#home">Home</a><a href="#apollo">Apollo</a><a href="#viking">Viking</a><a href="#ranging">Lunar Laser Ranging</a><a href="#activities">Activities</a>
+
+<a href="#space-equipment">Space Equipment</a>
+<a href="#moon">The Moon</a>
+<a href="#mars">Mars</a>
+<a href="#asteroids">Asteroids</a>
+<a href="#deep-space">Deep Space</a>
+
+</nav>
+<main>
+<section>
+<div class="eyebrow">Explore • Learn • Discover</div>
+<h2>Humanity's footprints beyond Earth</h2>
+<p class="intro">Since the 1960s, space missions have left scientific equipment on the Moon and Mars. Some devices completed their missions, while others still help scientists learn about our universe. Explore three important examples below.</p>
+</section>
+
+<section id="apollo">
+<div class="eyebrow">01 / The Moon</div>
+<h2>Apollo 11</h2>
+<div class="cards">
+<article class="card">
+<div class="symbol" aria-hidden="true">🌕</div>
+<span class="tag">July 1969</span>
+<h3>Mission overview</h3>
+<p>Apollo 11 was the first crewed mission to land astronauts on the Moon. Neil Armstrong and Buzz Aldrin explored the lunar surface while Michael Collins remained in lunar orbit.</p>
+<button class="btn" onclick="toggleFact('apolloFact')">Reveal a fact</button>
+<div class="fact" id="apolloFact">The Apollo 11 mission returned the first samples of Moon rocks and soil collected by humans.</div>
+</article>
+<article class="card">
+<div class="symbol" aria-hidden="true">🛰️</div>
+<span class="tag">Equipment</span>
+<h3>Experiments left behind</h3>
+<p>Apollo astronauts deployed scientific instruments on the Moon. These experiments helped researchers study the lunar environment and its interior.</p>
+<a class="btn" href="https://images.nasa.gov/search?q=Apollo%2011%20lunar%20surface" target="_blank" rel="noopener">View NASA images</a>
+</article>
+</div>
+</section>
+
+<section id="viking">
+<div class="eyebrow">02 / Mars</div>
+<h2>The Viking Program</h2>
+<div class="cards">
+<article class="card">
+<div class="symbol" aria-hidden="true">🔴</div>
+<span class="tag">1975–1976</span>
+<h3>Mission overview</h3>
+<p>NASA's Viking 1 and Viking 2 spacecraft carried orbiters and landers to Mars. The landers studied the planet's surface, atmosphere and soil.</p>
+<button class="btn" onclick="toggleFact('vikingFact')">Reveal a fact</button>
+<div class="fact" id="vikingFact">Viking 1 became the first U.S. spacecraft to successfully land on Mars in July 1976.</div>
+</article>
+<article class="card">
+<div class="symbol" aria-hidden="true">🤖</div>
+<span class="tag">Equipment</span>
+<h3>Viking landers</h3>
+<p>The landers used cameras, weather instruments and experiments to investigate the Martian environment and search for signs of biological activity.</p>
+<a class="btn" href="https://images.nasa.gov/search?q=Viking%201%20Mars%20lander" target="_blank" rel="noopener">View NASA images</a>
+</article>
+</div>
+</section>
+
+<section id="ranging">
+<div class="eyebrow">03 / Moon science</div>
+<h2>Lunar Laser Ranging</h2>
+<div class="cards">
+<article class="card">
+<div class="symbol" aria-hidden="true">✨</div>
+<span class="tag">Since 1969</span>
+<h3>What is it?</h3>
+<p>Apollo astronauts placed special reflector panels on the Moon. Scientists send laser pulses from Earth toward the reflectors and measure the time it takes for the light to return.</p>
+<button class="btn" onclick="toggleFact('laserFact')">Reveal a fact</button>
+<div class="fact" id="laserFact">The reflectors help scientists measure the Earth–Moon distance with remarkable precision.</div>
+</article>
+<article class="card">
+<div class="symbol" aria-hidden="true">🔭</div>
+<span class="tag">Scientific purpose</span>
+<h3>Why does it matter?</h3>
+<p>These measurements help scientists study the Moon's orbit, test ideas about gravity and understand how the Earth–Moon distance changes over time.</p>
+<a class="btn" href="https://images.nasa.gov/search?q=Apollo%20lunar%20laser%20ranging%20retroreflector" target="_blank" rel="noopener">View NASA images</a>
+</article>
+</div>
+</section>
+
+<section id="space-equipment">
+
+<h2>🚀 Explore Forgotten Space Equipment</h2>
+<p>Discover the spacecraft, rovers and scientific instruments that NASA left behind during its missions.</p>
+
+<!-- THE MOON -->
+<div class="mission-group" id="moon">
+
+<h2>🌕 Equipment Left on the Moon</h2>
+
+<div class="mission-grid">
+
+<div class="mission-card">
+<p class="date">1969–1972</p>
+<h3>Apollo Lunar Modules</h3>
+<p>The descent stages of the Lunar Modules, including Apollo 11's Eagle, were left on the Moon after astronauts returned to orbit.</p>
+<a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">1971–1972</p>
+<h3>Lunar Roving Vehicles (LRVs)</h3>
+<p>Three electric Moon buggies driven by astronauts during Apollo 15, 16 and 17. They were parked permanently on the Moon.</p>
+<a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">1969–1972</p>
+<h3>ALSEP Scientific Packages</h3>
+<p>Scientific instruments left on the Moon to study moonquakes, temperature and other lunar conditions after astronauts departed.</p>
+<a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-099C" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">1966–1968</p>
+<h3>Surveyor Landers</h3>
+<p>Robotic spacecraft sent to the Moon to demonstrate soft landings and investigate the lunar surface.</p>
+<a href="https://science.nasa.gov/mission/surveyor-3/" target="_blank">NASA Mission Details →</a>
+</div>
+
+</div>
+</div>
+
+<!-- MARS -->
+<div class="mission-group" id="mars">
+
+<h2>🔴 Equipment Left on Mars</h2>
+
+<div class="mission-grid">
+
+<div class="mission-card">
+<p class="date">1997</p>
+<h3>Sojourner Rover</h3>
+<p>The first rover to operate on Mars. It explored rocks and soil after being delivered by the Pathfinder lander.</p>
+<a href="https://science.nasa.gov/mission/mars-pathfinder/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">2004–2018</p>
+<h3>Spirit & Opportunity</h3>
+<p>Twin rovers that explored Mars for years, studying rocks, soil and evidence of ancient water.</p>
+<a href="https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">1976</p>
+<h3>Viking 1 & 2 Landers</h3>
+<p>The first U.S. landers to successfully operate on Mars. They photographed the planet and investigated its soil.</p>
+<a href="https://science.nasa.gov/mission/viking-1/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">2008 / 2018</p>
+<h3>Phoenix & InSight Landers</h3>
+<p>Phoenix investigated water ice in Martian soil, while InSight studied the planet's interior and detected marsquakes.</p>
+<a href="https://science.nasa.gov/mission/insight/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">2021–2024</p>
+<h3>Ingenuity Helicopter</h3>
+<p>The first aircraft to make powered, controlled flights on another planet. It ended its mission after rotor damage.</p>
+<a href="https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/" target="_blank">NASA Mission Details →</a>
+</div>
+
+</div>
+</div>
+
+<!-- ASTEROIDS -->
+<div class="mission-group" id="asteroids">
+
+<h2>☄️ Equipment Left at Asteroids</h2>
+
+<div class="mission-grid">
+
+<div class="mission-card">
+<p class="date">2007–2018</p>
+<h3>Dawn Spacecraft</h3>
+<p>Dawn explored and mapped Vesta and Ceres. After running out of fuel, it remained in orbit around Ceres.</p>
+<a href="https://science.nasa.gov/mission/dawn/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">2000–2001</p>
+<h3>NEAR Shoemaker</h3>
+<p>The first spacecraft to orbit an asteroid and successfully land on 433 Eros, where it remains.</p>
+<a href="https://science.nasa.gov/mission/near-shoemaker/" target="_blank">NASA Mission Details →</a>
+</div>
+
+</div>
+</div>
+
+<!-- DEEP SPACE -->
+<div class="mission-group" id="deep-space">
+
+<h2>🪐 Equipment Exploring Deep Space</h2>
+
+<div class="mission-grid">
+
+<div class="mission-card">
+<p class="date">1972 / 1973</p>
+<h3>Pioneer 10 & 11</h3>
+<p>Early deep-space probes that explored the outer planets. Both spacecraft continued on journeys away from the Sun.</p>
+<a href="https://science.nasa.gov/mission/pioneer-10/" target="_blank">NASA Mission Details →</a>
+</div>
+
+<div class="mission-card">
+<p class="date">2009–2018</p>
+<h3>Kepler Space Telescope</h3>
+<p>A revolutionary telescope that discovered thousands of planets beyond our Solar System. It retired after running out of fuel.</p>
+<a href="https://science.nasa.gov/mission/kepler/" target="_blank">NASA Mission Details →</a>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<section id="timeline">
+<div class="eyebrow">Mission timeline</div>
+<h2>Key dates</h2>
+<div class="timeline">
+<div class="event"><strong>July 1969 — Apollo 11</strong><p>First crewed Moon landing; astronauts deployed a laser-ranging retroreflector.</p></div>
+<div class="event"><strong>1975–1976 — Viking</strong><p>Viking spacecraft launched, and the landers reached the surface of Mars in 1976.</p></div>
+<div class="event"><strong>Today — Ongoing research</strong><p>Scientists continue using lunar reflectors to make precise measurements.</p></div>
+</div>
+</section>
+
+<section id="activities">
+<div class="eyebrow">Test what you've learned</div>
+<h2>Space knowledge quiz</h2>
+<div class="quizbox">
+<h3 id="question">Which mission first landed astronauts on the Moon?</h3>
+<div class="answers" id="answers">
+<button onclick="answer(0)">Viking 1</button>
+<button onclick="answer(1)">Apollo 11</button>
+<button onclick="answer(2)">Lunar Laser Ranging</button>
+</div>
+<div id="feedback" role="status" aria-live="polite"></div>
+<button class="btn" id="next" onclick="nextQuestion()" style="display:none">Next question</button>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">Keep exploring</div>
+<h2>Discover more with NASA</h2>
+<p>Explore official mission information and photographs through NASA's image and science websites.</p>
+<p><a href="https://images.nasa.gov/" target="_blank" rel="noopener">NASA Image and Video Library</a> ·
+<a href="https://science.nasa.gov/moon/" target="_blank" rel="noopener">NASA Moon</a> ·
+<a href="https://science.nasa.gov/mars/" target="_blank" rel="noopener">NASA Mars</a></p>
+<p class="small">Educational project. NASA images and information are linked to their official sources; check each asset's usage details before republishing.</p>
+</section>
+</main>
+<footer>BEYOND EARTH · Exploring NASA's Space Equipment</footer>
+<script>
+function toggleFact(id){document.getElementById(id).classList.toggle('show')}
+const quiz=[
+{q:"Which mission first landed astronauts on the Moon?",a:["Viking 1","Apollo 11","Lunar Laser Ranging"],correct:1,why:"Apollo 11 landed astronauts Neil Armstrong and Buzz Aldrin on the Moon in July 1969."},
+{q:"Where did the Viking landers operate?",a:["Mars","Venus","The Moon"],correct:0,why:"Viking 1 and Viking 2 landed on Mars in 1976."},
+{q:"What do lunar retroreflectors help scientists measure?",a:["The Moon's colour","The distance between Earth and the Moon","The temperature of the Sun"],correct:1,why:"Laser pulses reflected from the panels help scientists measure the Earth–Moon distance."}
+];
+let current=0,locked=false;
+function answer(index){
+ if(locked)return; locked=true;
+ const q=quiz[current];
+ document.getElementById('feedback').textContent=index===q.correct?"Correct! "+q.why:"Not quite. "+q.why;
+ document.getElementById('next').style.display="inline-block";
+}
+function nextQuestion(){
+ current=(current+1)%quiz.length;locked=false;
+ const q=quiz[current];document.getElementById('question').textContent=q.q;
+ document.getElementById('answers').innerHTML=q.a.map((x,i)=>'<button onclick="answer('+i+')">'+x+'</button>').join('');
+ document.getElementById('feedback').textContent="";
+ document.getElementById('next').style.display="none";
+}
+</script>
+</body>
+</html>
